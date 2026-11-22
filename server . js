@@ -1,3 +1,14 @@
-console.log("Welcome to SmartHub X!");
+const express = require("express");
+const app = express();
 
-console.log("Our AI platform is starting...");
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Welcome to SmartHub X AI Platform!");
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`SmartHub X server is running on port ${PORT}`);
+});
