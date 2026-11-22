@@ -7,8 +7,4 @@ app.get("/", (req, res) => {
   res.send("Welcome to SmartHub X AI Platform!");
 });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`SmartHub X server is running on port ${PORT}`);
-});
+module.exports = app;
