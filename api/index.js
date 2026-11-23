@@ -1,3 +1,4 @@
+
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -14,25 +15,31 @@ module.exports = async (req, res) => {
       });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({
-        error: "API key is missing."
+        error: "Gemini API key is missing."
       });
     }
 
     const response = await fetch(
-      "https://api.openai.com/v1/responses",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+          "x-goog-api-key": process.env.GEMINI_API_KEY
         },
         body: JSON.stringify({
-          model: "gpt-4.1-mini",
-          instructions:
-            "You are SmartHub X, a helpful AI assistant. Answer clearly and honestly. Never invent prices, sources, or facts.",
-          input: message
+          systemInstruction: {
+            parts: [{
+              text: "You are SmartHub X, a helpful AI assistant. Answer clearly and honestly. Never invent prices, sources, or facts."
+            }]
+          },
+          contents: [{
+            parts: [{
+              text: message
+            }]
+          }]
         })
       }
     );
@@ -41,12 +48,16 @@ module.exports = async (req, res) => {
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data.error?.message || "OpenAI request failed."
+        error: data.error?.message || "Gemini request failed."
       });
     }
 
+    const reply = data.candidates?.[0]?.content?.parts
+      ?.map(part => part.text || "")
+      .join("");
+
     return res.status(200).json({
-      reply: data.output_text
+      reply: reply || "No response was generated."
     });
 
   } catch (error) {
