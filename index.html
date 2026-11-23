@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071b24">
+<title>SmartHub — Think clearly. Choose confidently.</title>
+<style>
+:root{
+ --bg:#06151d;--bg2:#09232d;--panel:rgba(13,43,53,.78);--panel2:#103541;
+ --petrol:#087e83;--cyan:#4ce0d2;--blue:#48a9dc;--orange:#ff9b52;--text:#eef9f8;
+ --muted:#9db8bb;--line:rgba(116,220,213,.17);--shadow:0 20px 70px rgba(0,0,0,.32)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 78% 8%,rgba(8,126,131,.22),transparent 34%),radial-gradient(ellipse at 8% 44%,rgba(255,155,82,.08),transparent 27%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.6}
+a{color:inherit;text-decoration:none}button,select{font:inherit}
+.wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(5,20,27,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.brand{font-size:1.25rem;font-weight:850;letter-spacing:-.6px;display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--cyan),var(--petrol));display:grid;place-items:center;color:#042027;box-shadow:0 0 25px #19c7bd55;font-weight:900}
+nav{display:flex;gap:28px;color:var(--muted);font-size:.92rem}nav a:hover{color:var(--cyan)}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn{border:1px solid transparent;border-radius:12px;padding:11px 18px;font-weight:750;cursor:pointer;transition:.22s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.primary{background:linear-gradient(110deg,var(--cyan),#65bde7);color:#052129;box-shadow:0 8px 28px #20c9bf2b}
+.outline{border-color:var(--line);background:#0b2932;color:var(--text)}
+.orange{background:linear-gradient(110deg,#ffad65,var(--orange));color:#2c1708;box-shadow:0 8px 28px #ff9b5230}
+.menu{display:none;background:none;border:0;color:white;font-size:1.5rem}
+.hero{padding:92px 0 78px;display:grid;grid-template-columns:1.06fr .94fr;gap:55px;align-items:center;min-height:610px}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--cyan);font-size:.78rem;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 14px var(--orange)}
+h1{font-size:clamp(2.8rem,5.7vw,5rem);line-height:1.04;letter-spacing:-3px;margin:22px 0}
+.gradient{background:linear-gradient(100deg,#f5ffff 12%,var(--cyan) 60%,var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:1.12rem;max-width:570px}
+.hero-buttons{display:flex;gap:13px;flex-wrap:wrap;margin:30px 0}
+.proof{display:flex;gap:22px;flex-wrap:wrap;color:#a8c2c4;font-size:.84rem}.proof span:before{content:"✓";color:var(--orange);margin-right:8px}
+.visual{position:relative;min-height:420px;display:grid;place-items:center}
+.orbit{position:absolute;width:370px;height:370px;border:1px solid #42c9c055;border-radius:50%;box-shadow:0 0 60px #0b99902a,inset 0 0 60px #0b999018}
+.orbit:before,.orbit:after{content:"";position:absolute;inset:32px;border:1px dashed #4ce0d255;border-radius:50%;animation:spin 28s linear infinite}
+.orbit:after{inset:76px;border-color:#ffad6544;animation-direction:reverse;animation-duration:20s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.core{width:165px;height:165px;border-radius:35px;transform:rotate(45deg);background:linear-gradient(145deg,#0f5961,#092b38 65%);border:1px solid #65e7d6aa;box-shadow:0 0 55px #20c9bf55,0 0 100px #ff9b5218;display:grid;place-items:center;z-index:2}
+.core span{transform:rotate(-45deg);font-size:2.8rem;color:var(--cyan)}
+.float-card{position:absolute;background:rgba(11,40,49,.9);border:1px solid var(--line);padding:13px 16px;border-radius:14px;box-shadow:var(--shadow);backdrop-filter:blur(12px);font-size:.82rem}
+.float-card b{display:block;color:#f5ffff}.float-card small{color:var(--muted)}
+.fc1{top:44px;right:0}.fc2{bottom:48px;left:0}.fc3{bottom:4px;right:24px}
+section{padding:78px 0}.section-head{text-align:center;max-width:700px;margin:0 auto 42px}.section-head h2{font-size:clamp(2rem,4vw,3rem);letter-spacing:-1.5px;margin:12px 0}.section-head p{color:var(--muted);margin:0}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:linear-gradient(145deg,rgba(16,53,65,.86),rgba(7,30,39,.85));border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:var(--shadow);transition:.25s}
+.card:hover{transform:translateY(-5px);border-color:#4ce0d277}
+.icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#0d5960;color:var(--cyan);font-size:1.35rem;margin-bottom:17px}
+.card h3{margin:0 0 8px}.card p{color:var(--muted);margin:0;font-size:.94rem}
+#how{background:linear-gradient(180deg,transparent,rgba(7,38,46,.46),transparent)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.step{cursor:pointer;text-align:left;color:var(--text);background:#0a2630;border:1px solid var(--line);border-radius:18px;padding:20px;min-height:190px;transition:.2s}
+.step.active{border-color:var(--cyan);background:linear-gradient(145deg,#10464d,#0b2934);box-shadow:0 0 32px #23c9be20}
+.step-num{font-size:.78rem;color:var(--orange);font-weight:900;letter-spacing:1px}.step h3{font-size:1rem;margin:13px 0 7px}.step p{font-size:.84rem;color:var(--muted);margin:0}
+.step-detail{margin-top:16px;padding:22px 25px;border-radius:17px;border:1px solid #43cfc34a;background:linear-gradient(100deg,#0b303a,#0b242f);display:flex;align-items:center;gap:20px}
+.step-detail .big{font-size:2rem;color:var(--orange)}.step-detail p{color:var(--muted);margin:4px 0 0}
+#compare{position:relative;overflow:hidden}
+#compare:before{content:"";position:absolute;width:620px;height:620px;left:50%;top:0;transform:translateX(-50%);background:radial-gradient(circle,#087e8330,transparent 67%);pointer-events:none}
+.compare-shell{position:relative;border:1px solid #42d4c64a;border-radius:26px;padding:clamp(18px,4vw,38px);background:linear-gradient(145deg,rgba(12,48,58,.96),rgba(5,25,34,.96));box-shadow:0 0 0 1px #ff9b5210,0 25px 90px #001016aa}
+.compare-top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:26px}
+.live{color:var(--cyan);font-size:.75rem;font-weight:850;letter-spacing:1.4px}.live:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange);margin-right:8px;box-shadow:0 0 12px var(--orange)}
+.compare-top h2{font-size:clamp(1.7rem,3vw,2.4rem);margin:5px 0}
+.compare-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:20px}
+.form-panel{background:#061d27;border:1px solid var(--line);border-radius:18px;padding:22px}
+.field{margin-bottom:17px}.field label{display:block;font-size:.82rem;color:#b8d1d1;margin-bottom:7px}
+.field select,.field input{width:100%;padding:13px 14px;border-radius:11px;border:1px solid #28616a;background:#0b303a;color:white;outline:none}
+.field select:focus,.field input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #4ce0d21c}
+.results{border:1px solid #2b7475;border-radius:18px;padding:22px;background:radial-gradient(ellipse at 85% 0%,#0d686333,transparent 55%),#09232d;min-height:100%}
+.results-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}.results-head h3{margin:0}.tag{font-size:.7rem;color:var(--orange);border:1px solid #ff9b5266;padding:5px 9px;border-radius:30px}
+.placeholder{text-align:center;padding:38px 10px;color:var(--muted)}.placeholder .spark{font-size:2rem;color:var(--cyan);display:block;margin-bottom:8px}
+.product-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}.product-row:last-of-type{border:0}
+.product-row b{display:block}.product-row small{color:var(--muted)}.price{color:var(--cyan);font-weight:850}
+.recommend{margin-top:17px;padding:16px;border-radius:13px;background:linear-gradient(100deg,#0b4b50,#123b45);border:1px solid #4ce0d244}
+.recommend strong{color:var(--orange)}.recommend p{margin:5px 0 0;color:#c2d8d7;font-size:.88rem}
+.note{font-size:.75rem;color:#8ba8aa;margin-top:13px}
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+.plan{position:relative}.plan.featured{border-color:#ffad6580;box-shadow:0 0 42px #ff9b5214}.plan .price-big{font-size:2.2rem;font-weight:900;margin:12px 0 2px}.plan .price-big small{font-size:.85rem;color:var(--muted);font-weight:500}
+.plan ul{padding:0;list-style:none;color:#bdd0d0;font-size:.9rem;margin:20px 0}.plan li{margin:10px 0}.plan li:before{content:"✓";color:var(--cyan);margin-right:9px}
+.popular{position:absolute;right:18px;top:18px;color:var(--orange);font-size:.7rem;font-weight:850;letter-spacing:1px}
+.faq{max-width:800px;margin:auto}.faq details{padding:18px 0;border-bottom:1px solid var(--line)}.faq summary{cursor:pointer;font-weight:750}.faq p{color:var(--muted);margin-bottom:0}
+.cta{border:1px solid #3acfc04a;border-radius:25px;padding:42px;text-align:center;background:radial-gradient(ellipse at 50% 0%,#087e8340,transparent 70%),#0a2731}
+footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#e9fffb;color:#06232a;padding:12px 18px;border-radius:12px;font-weight:750;box-shadow:var(--shadow);transition:.25s;z-index:50}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:850px){nav{display:none}.menu{display:block}.hero{grid-template-columns:1fr;padding-top:65px}.visual{min-height:350px}.cards{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.compare-grid{grid-template-columns:1fr}.pricing{grid-template-columns:1fr}}
+@media(max-width:540px){.wrap{width:min(100% - 28px,1160px)}.nav{height:66px}.nav-actions .outline{display:none}.hero{gap:12px;padding:55px 0 45px}h1{letter-spacing:-2px}.visual{min-height:310px}.orbit{width:280px;height:280px}.core{width:125px;height:125px}.fc1{right:-3px;top:20px}.fc2{left:-4px;bottom:35px}.fc3{right:0;bottom:0}.cards,.steps{grid-template-columns:1fr}.step{min-height:0}.step-detail{align-items:flex-start}.compare-top{align-items:flex-start;flex-direction:column}.cta{padding:28px 18px}.proof{gap:10px;flex-direction:column}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+ <a class="brand" href="#home"><span class="logo">S</span> SmartHub</a>
+ <nav><a href="#home">Home</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#compare">Compare</a><a href="#pricing">Plans</a></nav>
+ <div class="nav-actions"><a class="btn outline" href="#pricing">View plans</a><a class="btn primary" href="#compare">Try Smart Compare</a></div><button class="menu" aria-label="Menu" onclick="document.querySelector('nav').style.display=document.querySelector('nav').style.display==='flex'?'none':'flex'">☰</button>
+</div></header>
+<main>
+<section class="wrap hero" id="home">
+ <div><div class="eyebrow"><span class="dot"></span> Intelligence that moves you forward</div>
+ <h1>Make your next decision <span class="gradient">your smartest one.</span></h1>
+ <p class="lead">Research less. Understand more. SmartHub helps you compare options, check trustworthy sources, and choose with confidence — without the noise.</p>
+ <div class="hero-buttons"><a class="btn primary" href="#compare">Explore Smart Compare ↗</a><a class="btn outline" href="#how">See how it works</a></div>
+ <div class="proof"><span>Source-aware research</span><span>Clear side-by-side comparisons</span><span>Decisions built around you</span></div></div>
+ <div class="visual"><div class="orbit"></div><div class="core"><span>✳</span></div>
+ <div class="float-card fc1"><b>Live research flow</b><small>Collect · Verify · Compare</small></div>
+ <div class="float-card fc2"><b>Source checked</b><small>Evidence behind every insight</small></div>
+ <div class="float-card fc3"><b>Decision clarity <span style="color:var(--orange)">↗</span></b><small>Your priorities come first</small></div></div>
+</section>
+<section id="features"><div class="wrap"><div class="section-head"><div class="eyebrow">Built for real decisions</div><h2>More than answers. <span class="gradient">A clearer way forward.</span></h2><p>SmartHub turns scattered information into useful, understandable decisions.</p></div>
+ <div class="cards">
+  <article class="card"><div class="icon">⌕</div><h3>Smart Research</h3><p>Explore relevant information from multiple sources instead of relying on one result or one opinion.</p></article>
+  <article class="card"><div class="icon">▤</div><h3>Intelligent Comparison</h3><p>See the differences that matter: price, features, trade-offs, and how each option fits your needs.</p></article>
+  <article class="card"><div class="icon">◈</div><h3>Trusted Sources</h3><p>Understand where information comes from, when it was checked, and what still needs verification.</p></article>
+ </div></div></section>
+<section id="how"><div class="wrap"><div class="section-head"><div class="eyebrow">A simple four-step flow</div><h2>From question to <span class="gradient">confident choice.</span></h2><p>Tap any step to see what happens behind the scenes.</p></div>
+ <div class="steps">
+  <button class="step active" data-step="0"><span class="step-num">STEP 01</span><h3>Tell us what you need</h3><p>Describe your goal, budget, and priorities.</p></button>
+  <button class="step" data-step="1"><span class="step-num">STEP 02</span><h3>AI research</h3><p>Relevant information is gathered and checked.</p></button>
+  <button class="step" data-step="2"><span class="step-num">STEP 03</span><h3>Compare & analyze</h3><p>Options are organized around what matters to you.</p></button>
+  <button class="step" data-step="3"><span class="step-num">STEP 04</span><h3>Get your best choice</h3><p>Receive a reasoned recommendation with sources.</p></button>
+ </div>
+ <div class="step-detail"><div class="big" id="stepIcon">⌘</div><div><b id="stepTitle">Start with your real needs</b><p id="stepText">Tell SmartHub what you are trying to decide. Add a budget, must-have features, and anything you want to avoid.</p></div></div>
+</div></section>
+<section id="compare"><div class="wrap"><div class="section-head"><div class="eyebrow">The SmartHub comparison lab</div><h2>See the whole picture. <span class="gradient">Not just a list.</span></h2><p>Choose a category and priorities to preview how a guided comparison can work.</p></div>
+ <div class="compare-shell"><div class="compare-top"><div><div class="live">SMART COMPARISON WORKSPACE</div><h2>Build your decision view</h2><div style="color:var(--muted);font-size:.9rem">A focused workspace for comparing what matters.</div></div><span class="tag">INTERACTIVE PREVIEW</span></div>
+ <div class="compare-grid">
+  <div class="form-panel">
+   <div class="field"><label for="category">What are you comparing?</label><select id="category"><option value="phones">Smartphones</option><option value="laptops">Laptops</option><option value="internet">Internet plans</option><option value="home">Home appliances</option></select></div>
+   <div class="field"><label for="budget">Your budget range</label><select id="budget"><option>Flexible</option><option>Budget friendly</option><option>Mid-range</option><option>Premium</option></select></div>
+   <div class="field"><label for="priority">Your top priority</label><select id="priority"><option value="value">Best overall value</option><option value="performance">Performance</option><option value="price">Lowest price</option><option value="reliability">Reliability</option></select></div>
+   <div class="field"><label for="extra">Anything else? (optional)</label><input id="extra" placeholder="e.g. long battery life, 5G..."></div>
+   <button class="btn orange" style="width:100%" onclick="runCompare()">Generate comparison <span>↗</span></button>
+   <p class="note">Preview only — sample data, not live market prices.</p>
+  </div>
+  <div class="results" id="results" aria-live="polite"><div class="results-head"><h3>Decision intelligence</h3><span class="tag">AWAITING INPUT</span></div><div class="placeholder"><span class="spark">✳</span><b>Your comparison will appear here</b><p>Set your priorities, then generate a structured view of the options.</p></div></div>
+ </div></div></div></section>
+<section id="pricing"><div class="wrap"><div class="section-head"><div class="eyebrow">Plans that grow with you</div><h2>Choose how much <span class="gradient">intelligence you need.</span></h2><p>Start simple. Upgrade when you need more research power and flexibility.</p></div>
+ <div class="pricing">
+  <article class="card plan"><h3>Free</h3><p>Explore the essentials.</p><div class="price-big">$0 <small>/ forever</small></div><ul><li>Limited comparisons</li><li>Basic research summaries</li><li>Core source links</li><li>Standard response speed</li></ul><button class="btn outline" style="width:100%" onclick="choosePlan('Free')">Get started</button></article>
+  <article class="card plan featured"><span class="popular">MOST POPULAR</span><h3>Plus</h3><p>For smarter everyday decisions.</p><div class="price-big">Coming soon</div><ul><li>More monthly comparisons</li><li>Deeper research and analysis</li><li>Expanded comparison criteria</li><li>Saved decision history</li><li>Priority processing</li></ul><button class="btn orange" style="width:100%" onclick="choosePlan('Plus')">Join the Plus waitlist</button></article>
+  <article class="card plan"><h3>Pro</h3><p>For demanding research workflows.</p><div class="price-big">Coming soon</div><ul><li>Higher usage limits</li><li>Advanced multi-option analysis</li><li>Detailed evidence summaries</li><li>Exportable reports</li><li>Early access to new tools</li></ul><button class="btn outline" style="width:100%" onclick="choosePlan('Pro')">Join the Pro waitlist</button></article>
+ </div><p class="note" style="text-align:center;margin-top:18px">Subscription prices and final feature limits will be announced before paid plans launch. No payment is collected on this demo.</p>
+</div></section>
+<section><div class="wrap"><div class="section-head"><div class="eyebrow">Trust is part of the product</div><h2>Know what you can <span class="gradient">rely on.</span></h2><p>Useful AI should make its evidence visible — and be honest about uncertainty.</p></div>
+ <div class="cards"><article class="card"><div class="icon">◎</div><h3>Source transparency</h3><p>Every factual result should point back to its original source whenever available.</p></article><article class="card"><div class="icon">◷</div><h3>Freshness context</h3><p>Time-sensitive details such as prices should show when they were last verified.</p></article><article class="card"><div class="icon">⚖</div><h3>Honest limitations</h3><p>Conflicting or missing information should be highlighted, not hidden behind confident wording.</p></article></div>
+</div></section>
+<section><div class="wrap"><div class="cta"><div class="eyebrow">Make your next move count</div><h2>Ready to compare with clarity?</h2><p style="color:var(--muted)">Start with one decision. Let SmartHub organize the details.</p><a class="btn primary" href="#compare">Try the comparison workspace ↗</a></div></div></section>
+<section><div class="wrap"><div class="section-head"><div class="eyebrow">A few quick answers</div><h2>Frequently asked questions</h2></div><div class="faq">
+ <details><summary>Is SmartHub a chatbot?</summary><p>SmartHub is designed as a task-focused decision platform. The goal is to research, organize evidence, compare options, and help you reach a practical outcome — not just chat.</p></details>
+ <details><summary>Are the prices in this demo real?</summary><p>No. The comparison currently uses illustrative sample data to demonstrate the interface. A live version would retrieve current prices and show the source and verification time.</p></details>
+ <details><summary>Can I use SmartHub for free?</summary><p>The planned Free tier will offer limited access. Paid tiers are planned for higher usage and advanced features, with pricing announced before launch.</p></details>
+ <details><summary>Will SmartHub always be accurate?</summary><p>No AI system can guarantee perfect accuracy. SmartHub is designed to show sources, flag uncertainty, and make verification easier.</p></details>
+</div></div></section>
+</main>
+<footer><div class="wrap foot"><a class="brand" href="#home"><span class="logo">S</span> SmartHub</a><span>Think clearly. Choose confidently.</span><span>© 2026 SmartHub · Demo experience</span></div></footer>
+<div class="toast" id="toast"></div>
+<script>
+const stepData=[
+ ["⌘","Start with your real needs","Tell SmartHub what you are trying to decide. Add a budget, must-have features, and anything you want to avoid."],
+ ["⌕","Research across relevant sources","The system gathers useful information, checks source quality, and identifies details that may be missing or outdated."],
+ ["▤","Turn information into insight","Options are lined up against your priorities, with key differences, trade-offs, and evidence made easy to scan."],
+ ["◈","Choose with confidence","Get a recommendation that explains why it fits, what the trade-offs are, and where you can verify the details."]
+];
+document.querySelectorAll(".step").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
+ const d=stepData[Number(btn.dataset.step)];document.getElementById("stepIcon").textContent=d[0];document.getElementById("stepTitle").textContent=d[1];document.getElementById("stepText").textContent=d[2];
+}));
+const sample={
+ phones:[["Option A","Balanced performance · strong battery","$—"],["Option B","Best camera-focused profile","$—"],["Option C","Value-focused everyday use","$—"]],
+ laptops:[["Option A","Portable · long battery life","$—"],["Option B","High-performance workflow","$—"],["Option C","Balanced study and work","$—"]],
+ internet:[["Plan A","Lower monthly cost · basic use","— / month"],["Plan B","Balanced speed and allowance","— / month"],["Plan C","Higher speed · heavy usage","— / month"]],
+ home:[["Option A","Energy-conscious everyday choice","$—"],["Option B","More capacity and features","$—"],["Option C","Simple value-focused option","$—"]]
+};
+function runCompare(){
+ const category=document.getElementById("category").value,budget=document.getElementById("budget").value,priority=document.getElementById("priority").value,extra=document.getElementById("extra").value.trim();
+ const names={phones:"Smartphones",laptops:"Laptops",internet:"Internet plans",home:"Home appliances"};
+ const priorities={value:"overall value",performance:"performance",price:"price",reliability:"reliability"};
+ const list=sample[category];
+ const labels=priority==="price"?[2,0,1]:priority==="performance"?[1,0,2]:priority==="reliability"?[0,1,2]:[0,2,1];
+ const result=document.getElementById("results");
+ result.innerHTML=`<div class="results-head"><h3>${names[category]} · comparison view</h3><span class="tag">SAMPLE ANALYSIS</span></div>
+ <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">Priority: <b style="color:var(--cyan)">${priorities[priority]}</b> · Budget: ${budget}${extra?` · Note: ${escapeHtml(extra)}`:""}</div>
+ ${labels.map((idx,i)=>`<div class="product-row"><div><b>${list[idx][0]} ${i===0?'<span style="color:var(--orange);font-size:.68rem"> · TOP MATCH</span>':""}</b><small>${list[idx][1]}</small></div><span class="price">${list[idx][2]}</span></div>`).join("")}
+ <div class="recommend"><strong>✳ Suggested direction</strong><p>${list[labels[0]][0]} is the illustrative best match for your selected priority. In a live SmartHub experience, this section would include verified product details, source links, current prices, and a clear explanation of trade-offs.</p></div>
+ <p class="note">Demo data only. No products, prices, or sources have been fetched or verified.</p>`;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function choosePlan(name){showToast(name==="Free"?"Free experience selected — welcome to SmartHub.":name+" plan: waitlist interest noted in this demo. No signup or payment is connected yet.");}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
+</script>
+</body></html>
