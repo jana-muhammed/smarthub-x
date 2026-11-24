@@ -172,19 +172,70 @@ const sample={
  internet:[["Plan A","Lower monthly cost · basic use","— / month"],["Plan B","Balanced speed and allowance","— / month"],["Plan C","Higher speed · heavy usage","— / month"]],
  home:[["Option A","Energy-conscious everyday choice","$—"],["Option B","More capacity and features","$—"],["Option C","Simple value-focused option","$—"]]
 };
-function runCompare(){
- const category=document.getElementById("category").value,budget=document.getElementById("budget").value,priority=document.getElementById("priority").value,extra=document.getElementById("extra").value.trim();
- const names={phones:"Smartphones",laptops:"Laptops",internet:"Internet plans",home:"Home appliances"};
- const priorities={value:"overall value",performance:"performance",price:"price",reliability:"reliability"};
- const list=sample[category];
- const labels=priority==="price"?[2,0,1]:priority==="performance"?[1,0,2]:priority==="reliability"?[0,1,2]:[0,2,1];
- const result=document.getElementById("results");
- result.innerHTML=`<div class="results-head"><h3>${names[category]} · comparison view</h3><span class="tag">SAMPLE ANALYSIS</span></div>
- <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">Priority: <b style="color:var(--cyan)">${priorities[priority]}</b> · Budget: ${budget}${extra?` · Note: ${escapeHtml(extra)}`:""}</div>
- ${labels.map((idx,i)=>`<div class="product-row"><div><b>${list[idx][0]} ${i===0?'<span style="color:var(--orange);font-size:.68rem"> · TOP MATCH</span>':""}</b><small>${list[idx][1]}</small></div><span class="price">${list[idx][2]}</span></div>`).join("")}
- <div class="recommend"><strong>✳ Suggested direction</strong><p>${list[labels[0]][0]} is the illustrative best match for your selected priority. In a live SmartHub experience, this section would include verified product details, source links, current prices, and a clear explanation of trade-offs.</p></div>
- <p class="note">Demo data only. No products, prices, or sources have been fetched or verified.</p>`;
-}
+async function runCompare(){
+  const category=document.getElementById("category").value;
+  const budget=document.getElementById("budget").value;
+  const priority=document.getElementById("priority").value;
+  const extra=document.getElementById("extra").value.trim();
+
+  const names={
+    phones:"Smartphones",
+    laptops:"Laptops",
+    internet:"Internet plans",
+    home:"Home appliances"
+  };
+
+  const priorities={
+    value:"overall value",
+    performance:"performance",
+    price:"price",
+    reliability:"reliability"
+  };
+
+  const result=document.getElementById("results");
+
+  const prompt=`Compare options in the category ${names[category]}.
+Budget: ${budget}.
+Main priority: ${priorities[priority]}.
+Additional requirements: ${extra || "None"}.
+
+Give a helpful general comparison and recommendation.
+Do not invent current prices, product availability, or sources.
+Clearly explain when information needs external verification.`;
+
+  result.innerHTML="<p>SmartHub X is thinking... Please wait.</p>";
+
+  try{
+    const response=await fetch("/api",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:prompt})
+    });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || "Request failed.");
+    }
+
+    result.innerHTML=`
+      <div class="results-head">
+        <h3>${names[category]} · comparison</h3>
+        <span class="tag">AI ANALYSIS</span>
+      </div>
+      <div class="recommend">
+        <strong>✳ SmartHub X Recommendation</strong>
+        <p>${escapeHtml(data.reply || "No response generated.").replace(/\n/g,"<br>")}</p>
+      </div>
+    `;
+  }catch(error){
+    result.innerHTML=`
+      <div class="note">
+        Error: ${escapeHtml(error.message)}
+      </div>
+    `;
+  }
+ }
 function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function choosePlan(name){showToast(name==="Free"?"Free experience selected — welcome to SmartHub.":name+" plan: waitlist interest noted in this demo. No signup or payment is connected yet.");}
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
