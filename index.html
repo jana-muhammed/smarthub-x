@@ -236,11 +236,73 @@ function buildComparePrompt(){
  const priorities={value:"overall value",performance:"performance",price:"price",reliability:"reliability"};
  return {title:names[category],prompt:`You are SmartHub X, a careful research and comparison assistant. Compare ${names[category]}.\nBudget: ${budget}.\nMain priority: ${priorities[priority]}.\nAdditional requirements: ${extra||"None"}.\n\nGive a structured comparison, practical recommendation, reasons, trade-offs, and what the user should verify. Never invent current prices, product specifications, availability, ratings, URLs, or sources. Do not create numeric scores unless reliable comparable evidence is explicitly available; otherwise say a reliable numeric score cannot be calculated. If no live web grounding is provided, clearly say that sources were not independently verified and do not invent citations. Separate known general guidance from details requiring current verification. Answer in the user's language.`};
 }
-async function callSmartHub(message,mode="compare",context=""){
- const response=await fetch("/api",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message,mode,context})});
- let data={};try{data=await response.json();}catch(e){throw new Error("The server returned an unexpected response. Please try again.");}
- if(!response.ok){const error=new Error(data.error||"The request could not be completed.");error.code=data.code||"UNKNOWN_ERROR";error.status=response.status;throw error;}
- return data;
+async function callSmartHub(message, mode = "compare", context = "") {
+  const controller = new AbortController();
+
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, 35000);
+
+  try {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message,
+        mode,
+        context
+      }),
+      signal: controller.signal
+    });
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch (e) {
+      throw new Error("The server returned an invalid response.");
+    }
+
+    if (!response.ok) {
+      const error = new Error(
+        data.error || "The AI request failed."
+      );
+
+      error.code = data.code || "UNKNOWN_ERROR";
+      error.status = response.status;
+
+      throw error;
+    }
+
+    if (!data || typeof data.reply !== "string" || !data.reply.trim()) {
+      throw new Error(
+        "Gemini connected, but no valid answer was returned."
+      );
+    }
+
+    return data;
+
+  } catch (error) {
+    if (error.name === "AbortError") {
+      const timeoutError = new Error(
+        "The AI request took too long. Please try again."
+      );
+
+      timeoutError.code = "AI_TIMEOUT";
+      throw timeoutError;
+    }
+
+    if (!error.status && error.name === "TypeError") {
+      error.code = "CONNECTION_ERROR";
+    }
+
+    throw error;
+
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 function renderResult(title,reply,data={}){
  const result=document.getElementById("results");
