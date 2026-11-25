@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +12,7 @@
  --petrol:#087e83;--cyan:#4ce0d2;--blue:#48a9dc;--orange:#ff9b52;--text:#eef9f8;
  --muted:#9db8bb;--line:rgba(116,220,213,.17);--shadow:0 20px 70px rgba(0,0,0,.32)
 }
-*{box-sizing:border-box}html{scroll-behavior:smooth}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{margin:0;background:radial-gradient(ellipse at 78% 8%,rgba(8,126,131,.22),transparent 34%),radial-gradient(ellipse at 8% 44%,rgba(255,155,82,.08),transparent 27%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.6}
 a{color:inherit;text-decoration:none}button,select{font:inherit}
 .wrap{width:min(1160px,calc(100% - 40px));margin:auto}
@@ -19,10 +20,11 @@ header{position:sticky;top:0;z-index:20;background:rgba(5,20,27,.82);backdrop-fi
 .nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:22px}
 .brand{font-size:1.25rem;font-weight:850;letter-spacing:-.6px;display:flex;align-items:center;gap:10px}
 .logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--cyan),var(--petrol));display:grid;place-items:center;color:#042027;box-shadow:0 0 25px #19c7bd55;font-weight:900}
-nav{display:flex;gap:28px;color:var(--muted);font-size:.92rem}nav a:hover{color:var(--cyan)}
+nav{display:flex;gap:24px;color:var(--muted);font-size:.92rem}nav a:hover{color:var(--cyan)}
 .nav-actions{display:flex;gap:10px;align-items:center}
 .btn{border:1px solid transparent;border-radius:12px;padding:11px 18px;font-weight:750;cursor:pointer;transition:.22s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn:disabled{cursor:wait;transform:none;filter:none}
 .primary{background:linear-gradient(110deg,var(--cyan),#65bde7);color:#052129;box-shadow:0 8px 28px #20c9bf2b}
 .outline{border-color:var(--line);background:#0b2932;color:var(--text)}
 .orange{background:linear-gradient(110deg,#ffad65,var(--orange));color:#2c1708;box-shadow:0 8px 28px #ff9b5230}
@@ -40,16 +42,23 @@ h1{font-size:clamp(2.8rem,5.7vw,5rem);line-height:1.04;letter-spacing:-3px;margi
 .orbit:before,.orbit:after{content:"";position:absolute;inset:32px;border:1px dashed #4ce0d255;border-radius:50%;animation:spin 28s linear infinite}
 .orbit:after{inset:76px;border-color:#ffad6544;animation-direction:reverse;animation-duration:20s}
 @keyframes spin{to{transform:rotate(360deg)}}
-.core{width:165px;height:165px;border-radius:35px;transform:rotate(45deg);background:linear-gradient(145deg,#0f5961,#092b38 65%);border:1px solid #65e7d6aa;box-shadow:0 0 55px #20c9bf55,0 0 100px #ff9b5218;display:grid;place-items:center;z-index:2}
-.core span{transform:rotate(-45deg);font-size:2.8rem;color:var(--cyan)}
-.float-card{position:absolute;background:rgba(11,40,49,.9);border:1px solid var(--line);padding:13px 16px;border-radius:14px;box-shadow:var(--shadow);backdrop-filter:blur(12px);font-size:.82rem}
+.core{width:165px;height:165px;border-radius:35px;transform:rotate(45deg);background:linear-gradient(145deg,#0f5961,#092b38 65%);border:1px solid #65e7d6aa;box-shadow:0 0 55px #20c9bf55,0 0 100px #ff9b5218;display:grid;place-items:center;z-index:2;position:relative;animation:corePulse 4s ease-in-out infinite}
+.core:before{content:"";position:absolute;inset:-25px;border-radius:43px;border:1px solid #4ce0d266;box-shadow:0 0 25px #4ce0d244,0 0 65px #087e8366;animation:coreHalo 3.5s ease-in-out infinite;pointer-events:none}
+.core:after{content:"";position:absolute;inset:-48px;border-radius:55px;background:radial-gradient(circle,#4ce0d21c,transparent 70%);z-index:-1;animation:coreLight 4s ease-in-out infinite;pointer-events:none}
+.core span{transform:rotate(-45deg);font-size:2.8rem;color:var(--cyan);text-shadow:0 0 20px #4ce0d2}
+@keyframes corePulse{0%,100%{box-shadow:0 0 45px #20c9bf44,0 0 90px #ff9b5212}50%{box-shadow:0 0 75px #20c9bf88,0 0 135px #ff9b5233}}
+@keyframes coreHalo{0%,100%{transform:scale(.94);opacity:.4}50%{transform:scale(1.08);opacity:1}}
+@keyframes coreLight{0%,100%{opacity:.45;transform:scale(.9)}50%{opacity:1;transform:scale(1.15)}}
+.float-card{position:absolute;background:rgba(11,40,49,.9);border:1px solid var(--line);padding:13px 16px;border-radius:14px;box-shadow:var(--shadow);backdrop-filter:blur(12px);font-size:.82rem;animation:floatCard 4s ease-in-out infinite}
 .float-card b{display:block;color:#f5ffff}.float-card small{color:var(--muted)}
-.fc1{top:44px;right:0}.fc2{bottom:48px;left:0}.fc3{bottom:4px;right:24px}
+.fc1{top:44px;right:0;animation-delay:0s}.fc2{bottom:48px;left:0;animation-delay:1s}.fc3{bottom:4px;right:24px;animation-delay:2s}
+@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 section{padding:78px 0}.section-head{text-align:center;max-width:700px;margin:0 auto 42px}.section-head h2{font-size:clamp(2rem,4vw,3rem);letter-spacing:-1.5px;margin:12px 0}.section-head p{color:var(--muted);margin:0}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .card{background:linear-gradient(145deg,rgba(16,53,65,.86),rgba(7,30,39,.85));border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:var(--shadow);transition:.25s}
 .card:hover{transform:translateY(-5px);border-color:#4ce0d277}
-.icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#0d5960;color:var(--cyan);font-size:1.35rem;margin-bottom:17px}
+.icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#0d5960;color:var(--cyan);font-size:1.35rem;margin-bottom:17px;transition:all .3s ease;cursor:pointer;user-select:none}
+.icon:hover,.icon:focus,.icon.lit{color:#eaffff;background:#087e83;box-shadow:0 0 12px #4ce0d2,0 0 28px #4ce0d288,0 0 48px #4ce0d244;transform:scale(1.08)}
 .card h3{margin:0 0 8px}.card p{color:var(--muted);margin:0;font-size:.94rem}
 #how{background:linear-gradient(180deg,transparent,rgba(7,38,46,.46),transparent)}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
@@ -82,18 +91,35 @@ section{padding:78px 0}.section-head{text-align:center;max-width:700px;margin:0 
 .plan ul{padding:0;list-style:none;color:#bdd0d0;font-size:.9rem;margin:20px 0}.plan li{margin:10px 0}.plan li:before{content:"✓";color:var(--cyan);margin-right:9px}
 .popular{position:absolute;right:18px;top:18px;color:var(--orange);font-size:.7rem;font-weight:850;letter-spacing:1px}
 .faq{max-width:800px;margin:auto}.faq details{padding:18px 0;border-bottom:1px solid var(--line)}.faq summary{cursor:pointer;font-weight:750}.faq p{color:var(--muted);margin-bottom:0}
+.faq-ai{max-width:800px;margin:34px auto 0;padding:25px;border-radius:20px;border:1px solid #4ce0d255;background:linear-gradient(145deg,#103541,#09232d);box-shadow:0 0 35px #20c9bf12}
+.faq-ai h3{margin:0 0 7px;font-size:1.2rem}.faq-ai>p{color:var(--muted);margin:0 0 18px;font-size:.9rem}
+.faq-ai-form{display:flex;gap:10px}
+.faq-ai-form input{flex:1;min-width:0;padding:13px 15px;border-radius:11px;border:1px solid #28616a;background:#061d27;color:white;outline:none}
+.faq-ai-form input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #4ce0d21c}
+.faq-ai-answer{display:none;margin-top:18px;padding:17px;border-radius:13px;background:#061d27;border:1px solid var(--line);color:#d5e9e7;white-space:pre-wrap;overflow-wrap:anywhere}
+.faq-ai-answer.show{display:block}
+.faq-ai-answer strong{display:block;color:var(--orange);margin-bottom:8px}
 .cta{border:1px solid #3acfc04a;border-radius:25px;padding:42px;text-align:center;background:radial-gradient(ellipse at 50% 0%,#087e8340,transparent 70%),#0a2731}
 footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#e9fffb;color:#06232a;padding:12px 18px;border-radius:12px;font-weight:750;box-shadow:var(--shadow);transition:.25s;z-index:50}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:850px){nav{display:none}.menu{display:block}.hero{grid-template-columns:1fr;padding-top:65px}.visual{min-height:350px}.cards{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.compare-grid{grid-template-columns:1fr}.pricing{grid-template-columns:1fr}}
-@media(max-width:540px){.wrap{width:min(100% - 28px,1160px)}.nav{height:66px}.nav-actions .outline{display:none}.hero{gap:12px;padding:55px 0 45px}h1{letter-spacing:-2px}.visual{min-height:310px}.orbit{width:280px;height:280px}.core{width:125px;height:125px}.fc1{right:-3px;top:20px}.fc2{left:-4px;bottom:35px}.fc3{right:0;bottom:0}.cards,.steps{grid-template-columns:1fr}.step{min-height:0}.step-detail{align-items:flex-start}.compare-top{align-items:flex-start;flex-direction:column}.cta{padding:28px 18px}.proof{gap:10px;flex-direction:column}}
+@media(max-width:850px){
+ nav{display:none;position:absolute;top:76px;left:0;right:0;padding:20px;background:#071b24;flex-direction:column;gap:16px;border-bottom:1px solid var(--line)}
+ .menu{display:block}.hero{grid-template-columns:1fr;padding-top:65px}.visual{min-height:350px}.cards{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.compare-grid{grid-template-columns:1fr}.pricing{grid-template-columns:1fr}
+}
+@media(max-width:540px){
+ .wrap{width:min(100% - 28px,1160px)}.nav{height:66px}.nav-actions .outline{display:none}.hero{gap:12px;padding:55px 0 45px}h1{letter-spacing:-2px}.visual{min-height:310px}.orbit{width:280px;height:280px}.core{width:125px;height:125px}.fc1{right:-3px;top:20px}.fc2{left:-4px;bottom:35px}.fc3{right:0;bottom:0}.cards,.steps{grid-template-columns:1fr}.step{min-height:0}.step-detail{align-items:flex-start}.compare-top{align-items:flex-start;flex-direction:column}.cta{padding:28px 18px}.proof{gap:10px;flex-direction:column}
+ .faq-ai{padding:18px}.faq-ai-form{flex-direction:column}.faq-ai-form .btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
 <header><div class="wrap nav">
  <a class="brand" href="#home"><span class="logo">S</span> SmartHub</a>
- <nav><a href="#home">Home</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#compare">Compare</a><a href="#pricing">Plans</a></nav>
- <div class="nav-actions"><a class="btn outline" href="#pricing">View plans</a><a class="btn primary" href="#compare">Try Smart Compare</a></div><button class="menu" aria-label="Menu" onclick="document.querySelector('nav').style.display=document.querySelector('nav').style.display==='flex'?'none':'flex'">☰</button>
+ <nav id="mainNav"><a href="#home">Home</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#compare">Compare</a><a href="#pricing">Plans</a><a href="#faq">FAQ</a></nav>
+ <div class="nav-actions"><a class="btn outline" href="#pricing">View plans</a><a class="btn primary" href="#compare">Try Smart Compare</a></div><button class="menu" aria-label="Menu" onclick="toggleMenu()">☰</button>
 </div></header>
 <main>
 <section class="wrap hero" id="home">
@@ -109,9 +135,9 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
 </section>
 <section id="features"><div class="wrap"><div class="section-head"><div class="eyebrow">Built for real decisions</div><h2>More than answers. <span class="gradient">A clearer way forward.</span></h2><p>SmartHub turns scattered information into useful, understandable decisions.</p></div>
  <div class="cards">
-  <article class="card"><div class="icon">⌕</div><h3>Smart Research</h3><p>Explore relevant information from multiple sources instead of relying on one result or one opinion.</p></article>
-  <article class="card"><div class="icon">▤</div><h3>Intelligent Comparison</h3><p>See the differences that matter: price, features, trade-offs, and how each option fits your needs.</p></article>
-  <article class="card"><div class="icon">◈</div><h3>Trusted Sources</h3><p>Understand where information comes from, when it was checked, and what still needs verification.</p></article>
+  <article class="card"><div class="icon" tabindex="0" role="button" aria-label="Light up Smart Research icon">⌕</div><h3>Smart Research</h3><p>Explore relevant information from multiple sources instead of relying on one result or one opinion.</p></article>
+  <article class="card"><div class="icon" tabindex="0" role="button" aria-label="Light up Intelligent Comparison icon">▤</div><h3>Intelligent Comparison</h3><p>See the differences that matter: price, features, trade-offs, and how each option fits your needs.</p></article>
+  <article class="card"><div class="icon" tabindex="0" role="button" aria-label="Light up Trusted Sources icon">◈</div><h3>Trusted Sources</h3><p>Understand where information comes from, when it was checked, and what still needs verification.</p></article>
  </div></div></section>
 <section id="how"><div class="wrap"><div class="section-head"><div class="eyebrow">A simple four-step flow</div><h2>From question to <span class="gradient">confident choice.</span></h2><p>Tap any step to see what happens behind the scenes.</p></div>
  <div class="steps">
@@ -143,19 +169,43 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
  </div><p class="note" style="text-align:center;margin-top:18px">Subscription prices and final feature limits will be announced before paid plans launch. No payment is collected on this demo.</p>
 </div></section>
 <section><div class="wrap"><div class="section-head"><div class="eyebrow">Trust is part of the product</div><h2>Know what you can <span class="gradient">rely on.</span></h2><p>Useful AI should make its evidence visible — and be honest about uncertainty.</p></div>
- <div class="cards"><article class="card"><div class="icon">◎</div><h3>Source transparency</h3><p>Every factual result should point back to its original source whenever available.</p></article><article class="card"><div class="icon">◷</div><h3>Freshness context</h3><p>Time-sensitive details such as prices should show when they were last verified.</p></article><article class="card"><div class="icon">⚖</div><h3>Honest limitations</h3><p>Conflicting or missing information should be highlighted, not hidden behind confident wording.</p></article></div>
+ <div class="cards"><article class="card"><div class="icon" tabindex="0" role="button" aria-label="Light up Source transparency icon">◎</div><h3>Source transparency</h3><p>Every factual result should point back to its original source whenever available.</p></article><article class="card"><div class="icon" tabindex="0" role="button" aria-label="Light up Freshness context icon">◷</div><h3>Freshness context</h3><p>Time-sensitive details such as prices should show when they were last verified.</p></article><article class="card"><div class="icon" tabindex="0" role="button" aria-label="Light up Honest limitations icon">⚖</div><h3>Honest limitations</h3><p>Conflicting or missing information should be highlighted, not hidden behind confident wording.</p></article></div>
 </div></section>
 <section><div class="wrap"><div class="cta"><div class="eyebrow">Make your next move count</div><h2>Ready to compare with clarity?</h2><p style="color:var(--muted)">Start with one decision. Let SmartHub organize the details.</p><a class="btn primary" href="#compare">Try the comparison workspace ↗</a></div></div></section>
-<section><div class="wrap"><div class="section-head"><div class="eyebrow">A few quick answers</div><h2>Frequently asked questions</h2></div><div class="faq">
+
+<section id="faq"><div class="wrap"><div class="section-head"><div class="eyebrow">A few quick answers</div><h2>Frequently asked questions</h2><p>Find answers about SmartHub and how the platform works.</p></div>
+<div class="faq">
  <details><summary>Is SmartHub a chatbot?</summary><p>SmartHub is designed as a task-focused decision platform. The goal is to research, organize evidence, compare options, and help you reach a practical outcome — not just chat.</p></details>
  <details><summary>Are the prices in this demo real?</summary><p>No. The comparison currently uses illustrative sample data to demonstrate the interface. A live version would retrieve current prices and show the source and verification time.</p></details>
  <details><summary>Can I use SmartHub for free?</summary><p>The planned Free tier will offer limited access. Paid tiers are planned for higher usage and advanced features, with pricing announced before launch.</p></details>
  <details><summary>Will SmartHub always be accurate?</summary><p>No AI system can guarantee perfect accuracy. SmartHub is designed to show sources, flag uncertainty, and make verification easier.</p></details>
-</div></div></section>
+</div>
+
+<div class="faq-ai">
+ <h3>Still have a question?</h3>
+ <p>Ask SmartHub AI. It will answer using the information available on this website. If the website doesn't contain the answer, it will tell you.</p>
+ <form class="faq-ai-form" id="faqQuestionForm">
+  <input id="faqQuestion" type="text" maxlength="500" placeholder="Type your question about SmartHub..." required>
+  <button class="btn primary" id="faqAskButton" type="submit">Ask SmartHub AI ↗</button>
+ </form>
+ <div class="faq-ai-answer" id="faqAnswer" aria-live="polite"></div>
+ <p class="note">Answers are generated by AI and should be checked against the information displayed on this website.</p>
+</div>
+</div></section>
 </main>
 <footer><div class="wrap foot"><a class="brand" href="#home"><span class="logo">S</span> SmartHub</a><span>Think clearly. Choose confidently.</span><span>© 2026 SmartHub · Demo experience</span></div></footer>
 <div class="toast" id="toast"></div>
 <script>
+function toggleMenu(){
+ const nav=document.getElementById("mainNav");
+ nav.style.display=nav.style.display==="flex"?"none":"flex";
+}
+document.querySelectorAll("#mainNav a").forEach(link=>{
+ link.addEventListener("click",()=>{
+  if(window.innerWidth<=850)document.getElementById("mainNav").style.display="none";
+ });
+});
+
 const stepData=[
  ["⌘","Start with your real needs","Tell SmartHub what you are trying to decide. Add a budget, must-have features, and anything you want to avoid."],
  ["⌕","Research across relevant sources","The system gathers useful information, checks source quality, and identifies details that may be missing or outdated."],
@@ -166,12 +216,18 @@ document.querySelectorAll(".step").forEach(btn=>btn.addEventListener("click",()=
  document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
  const d=stepData[Number(btn.dataset.step)];document.getElementById("stepIcon").textContent=d[0];document.getElementById("stepTitle").textContent=d[1];document.getElementById("stepText").textContent=d[2];
 }));
-const sample={
- phones:[["Option A","Balanced performance · strong battery","$—"],["Option B","Best camera-focused profile","$—"],["Option C","Value-focused everyday use","$—"]],
- laptops:[["Option A","Portable · long battery life","$—"],["Option B","High-performance workflow","$—"],["Option C","Balanced study and work","$—"]],
- internet:[["Plan A","Lower monthly cost · basic use","— / month"],["Plan B","Balanced speed and allowance","— / month"],["Plan C","Higher speed · heavy usage","— / month"]],
- home:[["Option A","Energy-conscious everyday choice","$—"],["Option B","More capacity and features","$—"],["Option C","Simple value-focused option","$—"]]
-};
+
+/* Click an icon to increase its glow */
+document.querySelectorAll(".icon").forEach(icon=>{
+ function toggleGlow(){icon.classList.toggle("lit");}
+ icon.addEventListener("click",toggleGlow);
+ icon.addEventListener("keydown",event=>{
+  if(event.key==="Enter"||event.key===" "){
+   event.preventDefault();toggleGlow();
+  }
+ });
+});
+
 async function runCompare(){
   const category=document.getElementById("category").value;
   const budget=document.getElementById("budget").value;
@@ -204,11 +260,8 @@ Clearly explain when information needs external verification.`;
     });
 
     let data={};
-    try{
-      data=await response.json();
-    }catch(parseError){
-      throw new Error("The server returned an unexpected response. Please try again.");
-    }
+    try{data=await response.json();}
+    catch(parseError){throw new Error("The server returned an unexpected response. Please try again.");}
 
     if(!response.ok){
       const error=new Error(data.error || "The request could not be completed.");
@@ -228,7 +281,6 @@ Clearly explain when information needs external verification.`;
       </div>
       <p class="note">Review important details and verify time-sensitive information with original sources.</p>
     `;
-
   }catch(error){
     const messages={
       FREE_LIMIT_REACHED:"The available free AI usage limit has been reached for now. Please try again later. No payment is required.",
@@ -237,17 +289,14 @@ Clearly explain when information needs external verification.`;
       CONNECTION_ERROR:"SmartHub X could not connect to the AI service. Please check your connection and try again.",
       GEMINI_REQUEST_FAILED:"The AI service could not complete this request. Please try again later."
     };
-
     let message=messages[error.code];
-
-    if(!message && error.status===429){
+    if(!message&&error.status===429){
       message="The AI service is receiving too many requests. Please wait and try again.";
-    }else if(!message && error.status>=500){
+    }else if(!message&&error.status>=500){
       message="SmartHub X AI is temporarily unavailable. Please try again later.";
     }else if(!message){
       message=error.message || "Something went wrong. Please try again later.";
     }
-
     result.innerHTML=`
       <div class="results-head">
         <h3>AI temporarily unavailable</h3>
@@ -264,9 +313,104 @@ Clearly explain when information needs external verification.`;
     button.style.opacity="1";
   }
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function choosePlan(name){showToast(name==="Free"?"Free experience selected — welcome to SmartHub.":name+" plan: waitlist interest noted in this demo. No signup or payment is connected yet.");}
-function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
+
+/* FAQ AI: answers are restricted to the website information below */
+document.getElementById("faqQuestionForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+
+ const input=document.getElementById("faqQuestion");
+ const button=document.getElementById("faqAskButton");
+ const answer=document.getElementById("faqAnswer");
+ const question=input.value.trim();
+
+ if(!question)return;
+
+ const websiteInformation=`
+SMART HUB WEBSITE INFORMATION — USE ONLY THESE FACTS:
+
+1. SmartHub is designed as a task-focused decision platform, not just a chatbot.
+2. Its goal is to research, organize evidence, compare options, and help users reach practical outcomes.
+3. The comparison demo currently uses illustrative sample data. Its displayed sample prices are not real live prices.
+4. A live version would retrieve current prices and show the source and verification time.
+5. The planned Free tier will offer limited access.
+6. Paid tiers are planned for higher usage and advanced features. Their final prices and feature limits have not yet been announced.
+7. No payment is collected on this demo.
+8. No AI system can guarantee perfect accuracy.
+9. SmartHub is designed to show sources, flag uncertainty, and make verification easier.
+10. The comparison workspace includes smartphones, laptops, internet plans, and home appliances.
+11. Users can select a budget range and a priority such as overall value, performance, lowest price, or reliability.
+12. The website describes a four-step process: tell SmartHub what you need, AI research, compare and analyze, and get a recommendation.
+13. The website includes features named Smart Research, Intelligent Comparison, Trusted Sources, Source transparency, Freshness context, and Honest limitations.
+14. AI service usage may be subject to temporary free-service limits. Users can retry later. No payment is required to retry.
+15. Plus and Pro plans are marked Coming soon.
+
+STRICT ANSWERING RULES:
+- Answer the user's question using ONLY the website information above.
+- Do not use outside knowledge, guesses, assumptions, or invented features.
+- Do not claim that a feature exists if it is not listed above.
+- If the website information does not contain the answer, say clearly: "This information is not currently available on the SmartHub website."
+- If a detail is planned or coming soon, clearly say it is planned, not already available.
+- Keep the answer clear, friendly, and concise.
+- Answer in the same language used by the user.
+`;
+
+ button.disabled=true;
+ button.textContent="Thinking...";
+ answer.classList.add("show");
+ answer.innerHTML="<strong>SmartHub AI</strong>Thinking about your question...";
+
+ const prompt=websiteInformation+"\n\nVisitor question:\n"+question;
+
+ try{
+  const response=await fetch("/api",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({message:prompt})
+  });
+
+  let data={};
+  try{data=await response.json();}
+  catch(parseError){throw new Error("The server returned an unexpected response. Please try again.");}
+
+  if(!response.ok){
+   const error=new Error(data.error||"The request could not be completed.");
+   error.code=data.code||"UNKNOWN_ERROR";
+   error.status=response.status;
+   throw error;
+  }
+
+  answer.innerHTML="<strong>SmartHub AI</strong>"+escapeHtml(data.reply||"I couldn't generate an answer. Please try again.");
+ }catch(error){
+  const messages={
+   FREE_LIMIT_REACHED:"The available free AI usage limit has been reached for now. Please try again later. No payment is required.",
+   RATE_LIMITED:"There are too many requests right now. Please wait a little and try again.",
+   AI_TEMPORARILY_UNAVAILABLE:"SmartHub X AI is temporarily unavailable. Please try again later.",
+   CONNECTION_ERROR:"Could not connect to the AI service. Please check your connection and try again.",
+   GEMINI_REQUEST_FAILED:"The AI service could not complete this request. Please try again later."
+  };
+  let message=messages[error.code];
+  if(!message&&error.status===429)message="The AI service is receiving too many requests. Please wait and try again.";
+  else if(!message&&error.status>=500)message="SmartHub X AI is temporarily unavailable. Please try again later.";
+  else if(!message)message=error.message||"Something went wrong. Please try again later.";
+
+  answer.innerHTML="<strong>SmartHub AI</strong>"+escapeHtml(message);
+ }finally{
+  button.disabled=false;
+  button.textContent="Ask SmartHub AI ↗";
+ }
+});
+
+function escapeHtml(s){
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function choosePlan(name){
+ showToast(name==="Free"?"Free experience selected — welcome to SmartHub.":name+" plan: waitlist interest noted in this demo. No signup or payment is connected yet.");
+}
+function showToast(msg){
+ const t=document.getElementById("toast");
+ t.textContent=msg;t.classList.add("show");
+ setTimeout(()=>t.classList.remove("show"),3000);
+}
 </script>
 </body>
- </html>
+</html>
