@@ -326,6 +326,7 @@ function escapeHtml(value) {
 }
 async function runCompare(){
  const {title,prompt}=buildComparePrompt();currentComparison=prompt;
+console.log("SmartHub X: runCompare started");
  const result=document.getElementById("results"),button=document.getElementById("compareButton");
  result.innerHTML="<div class='placeholder'><span class='spark'>✳</span><b>SmartHub X is thinking...</b><p>Preparing your comparison.</p></div>";button.disabled=true;
  try{const data=await callSmartHub(prompt,"compare","");renderResult(title,data.reply,data);saveHistory(title,prompt,data.reply);}
