@@ -304,7 +304,18 @@ async function callSmartHub(message, mode = "compare", context = "") {
     clearTimeout(timeout);
   }
 }
-function renderResult(title,reply,data={}){
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, function(char) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[char];
+  });
+}
+ function renderResult(title,reply,data={}){
  const result=document.getElementById("results");
  const safeReply=escapeHtml(reply||"No response generated.");
  const sources=Array.isArray(data.sources)?data.sources:[];
