@@ -75,7 +75,7 @@ section{padding:78px 0}.section-head{text-align:center;max-width:700px;margin:0 
 .product-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}.product-row:last-of-type{border:0}
 .product-row b{display:block}.product-row small{color:var(--muted)}.price{color:var(--cyan);font-weight:850}
 .recommend{margin-top:17px;padding:16px;border-radius:13px;background:linear-gradient(100deg,#0b4b50,#123b45);border:1px solid #4ce0d244}
-.recommend strong{color:var(--orange)}.recommend p{margin:5px 0 0;color:#c2d8d7;font-size:.88rem}
+.recommend strong{color:var(--orange)}.recommend p{margin:5px 0 0;color:#c2d8d7;font-size:.88rem;overflow-wrap:anywhere}
 .note{font-size:.75rem;color:#8ba8aa;margin-top:13px}
 .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
 .plan{position:relative}.plan.featured{border-color:#ffad6580;box-shadow:0 0 42px #ff9b5214}.plan .price-big{font-size:2.2rem;font-weight:900;margin:12px 0 2px}.plan .price-big small{font-size:.85rem;color:var(--muted);font-weight:500}
@@ -130,8 +130,8 @@ footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-s
    <div class="field"><label for="budget">Your budget range</label><select id="budget"><option>Flexible</option><option>Budget friendly</option><option>Mid-range</option><option>Premium</option></select></div>
    <div class="field"><label for="priority">Your top priority</label><select id="priority"><option value="value">Best overall value</option><option value="performance">Performance</option><option value="price">Lowest price</option><option value="reliability">Reliability</option></select></div>
    <div class="field"><label for="extra">Anything else? (optional)</label><input id="extra" placeholder="e.g. long battery life, 5G..."></div>
-   <button class="btn orange" style="width:100%" onclick="runCompare()">Generate comparison <span>↗</span></button>
-   <p class="note">Preview only — sample data, not live market prices.</p>
+   <button class="btn orange" id="compareButton" style="width:100%" onclick="runCompare()">Generate comparison <span>↗</span></button>
+   <p class="note">AI responses may be subject to temporary free-service usage limits. No payment is required to retry later.</p>
   </div>
   <div class="results" id="results" aria-live="polite"><div class="results-head"><h3>Decision intelligence</h3><span class="tag">AWAITING INPUT</span></div><div class="placeholder"><span class="spark">✳</span><b>Your comparison will appear here</b><p>Set your priorities, then generate a structured view of the options.</p></div></div>
  </div></div></div></section>
@@ -178,21 +178,10 @@ async function runCompare(){
   const priority=document.getElementById("priority").value;
   const extra=document.getElementById("extra").value.trim();
 
-  const names={
-    phones:"Smartphones",
-    laptops:"Laptops",
-    internet:"Internet plans",
-    home:"Home appliances"
-  };
-
-  const priorities={
-    value:"overall value",
-    performance:"performance",
-    price:"price",
-    reliability:"reliability"
-  };
-
+  const names={phones:"Smartphones",laptops:"Laptops",internet:"Internet plans",home:"Home appliances"};
+  const priorities={value:"overall value",performance:"performance",price:"price",reliability:"reliability"};
   const result=document.getElementById("results");
+  const button=document.getElementById("compareButton");
 
   const prompt=`Compare options in the category ${names[category]}.
 Budget: ${budget}.
@@ -203,7 +192,9 @@ Give a helpful general comparison and recommendation.
 Do not invent current prices, product availability, or sources.
 Clearly explain when information needs external verification.`;
 
-  result.innerHTML="<p>SmartHub X is thinking... Please wait.</p>";
+  result.innerHTML="<div class='placeholder'><span class='spark'>✳</span><b>SmartHub X is thinking...</b><p>Please wait while the AI prepares your comparison.</p></div>";
+  button.disabled=true;
+  button.style.opacity=".65";
 
   try{
     const response=await fetch("/api",{
@@ -212,32 +203,70 @@ Clearly explain when information needs external verification.`;
       body:JSON.stringify({message:prompt})
     });
 
-    const data=await response.json();
+    let data={};
+    try{
+      data=await response.json();
+    }catch(parseError){
+      throw new Error("The server returned an unexpected response. Please try again.");
+    }
 
     if(!response.ok){
-      throw new Error(data.error || "Request failed.");
+      const error=new Error(data.error || "The request could not be completed.");
+      error.code=data.code || "UNKNOWN_ERROR";
+      error.status=response.status;
+      throw error;
     }
 
     result.innerHTML=`
       <div class="results-head">
-        <h3>${names[category]} · comparison</h3>
+        <h3>${escapeHtml(names[category])} · comparison</h3>
         <span class="tag">AI ANALYSIS</span>
       </div>
       <div class="recommend">
         <strong>✳ SmartHub X Recommendation</strong>
         <p>${escapeHtml(data.reply || "No response generated.").replace(/\n/g,"<br>")}</p>
       </div>
+      <p class="note">Review important details and verify time-sensitive information with original sources.</p>
     `;
+
   }catch(error){
+    const messages={
+      FREE_LIMIT_REACHED:"The available free AI usage limit has been reached for now. Please try again later. No payment is required.",
+      RATE_LIMITED:"There are too many requests right now. Please wait a little and try again.",
+      AI_TEMPORARILY_UNAVAILABLE:"SmartHub X AI is temporarily busy. Please try again later.",
+      CONNECTION_ERROR:"SmartHub X could not connect to the AI service. Please check your connection and try again.",
+      GEMINI_REQUEST_FAILED:"The AI service could not complete this request. Please try again later."
+    };
+
+    let message=messages[error.code];
+
+    if(!message && error.status===429){
+      message="The AI service is receiving too many requests. Please wait and try again.";
+    }else if(!message && error.status>=500){
+      message="SmartHub X AI is temporarily unavailable. Please try again later.";
+    }else if(!message){
+      message=error.message || "Something went wrong. Please try again later.";
+    }
+
     result.innerHTML=`
-      <div class="note">
-        Error: ${escapeHtml(error.message)}
+      <div class="results-head">
+        <h3>AI temporarily unavailable</h3>
+        <span class="tag">PLEASE NOTE</span>
+      </div>
+      <div class="recommend">
+        <strong>SmartHub X message</strong>
+        <p>${escapeHtml(message)}</p>
+        <p>Your other SmartHub X website sections remain available. You can retry the AI comparison later.</p>
       </div>
     `;
+  }finally{
+    button.disabled=false;
+    button.style.opacity="1";
   }
- }
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function choosePlan(name){showToast(name==="Free"?"Free experience selected — welcome to SmartHub.":name+" plan: waitlist interest noted in this demo. No signup or payment is connected yet.");}
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
 </script>
-</body></html>
+</body>
+ </html>
